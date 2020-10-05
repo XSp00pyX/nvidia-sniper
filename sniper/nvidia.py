@@ -1,14 +1,21 @@
 import logging
 import random
 import string
-import colorama
+try:
+    import colorama
 
-from selenium import webdriver
-from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException, ElementNotInteractableException, WebDriverException
-from selenium.webdriver.support.ui import WebDriverWait, Select
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
+    from selenium import webdriver
+    from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException, ElementNotInteractableException, WebDriverException
+    from selenium.webdriver.support.ui import WebDriverWait, Select
+    from selenium.webdriver.support import expected_conditions as EC
+    from selenium.webdriver.common.keys import Keys
+    from selenium.webdriver.common.by import By
+except Exception:
+    logging.error(
+        'Could not import all required modules. '\
+        'Please run the following command again:\n\n'\
+        '\tpipenv install\n')
+    exit()
 
 import sniper.constants as const
 
@@ -132,7 +139,22 @@ def fill_out_form(driver, timeout, customer):
         customer['billing']['email'])
 
     if 'shipping' in customer:
-        driver.find_element(By.ID, customer['shipping']['speed']).click()
+        try:
+            shipping_speed = customer['shipping']['speed']
+            driver.find_element(By.ID, shipping_speed).click()
+        except Exception:
+            logging.warning(f'Could not find shipping speed {shipping_speed}')
+            if 'backup-speed' in customer['shipping']:
+                if customer['shipping']['backup-speed']:
+                    logging.info('Continuing with default speed')
+                else:
+                    logging.info('User opted to stop if shipping speed not found.')
+                    exit()
+            else:
+                logging.warning(
+                    'data/customer.json missing "backup-speed" option under "shipping", '\
+                    'continuing with default speed')
+                   
 
         shipping_expanded = False
         while not shipping_expanded:

@@ -4,16 +4,24 @@ import json
 import logging
 import queue
 import asyncio
-import aiohttp
-import colorama
+try:
+    import aiohttp
+    import colorama
+    
+    from pick import pick
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+    from selenium.common.exceptions import TimeoutException, NoSuchElementException, WebDriverException
+except Exception:
+    logging.error(
+        'Could not import all required modules. '\
+        'Please run the following command again:\n\n'\
+        '\tpipenv install\n')
+    exit()
 
 from pathlib import Path
 from time import sleep
-from pick import pick
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, NoSuchElementException, WebDriverException
 
 import sniper.api as api
 import sniper.nvidia as nvidia
@@ -48,8 +56,8 @@ async def checkout_api(driver, user_agent, timeout, locale, dr_locale, api_curre
             try:
                 inventory = await api.get_inventory_status(session, dr_locale, api_currency, dr_id)
             except Exception:
-                logging.exception(
-                    f'Failed to get inventory status for {dr_id}')
+                logging.info(
+                    f'Failed to get inventory status for {dr_id}, the API is most likely down for everyone')
                 return False
             logging.info(f'Inventory status for {dr_id}: {inventory}')
             if inventory != 'PRODUCT_INVENTORY_OUT_OF_STOCK':
@@ -167,7 +175,7 @@ async def main():
     user_agent = driver.execute_script('return navigator.userAgent;')
 
     log_format = '%(asctime)s nvidia-sniper: %(message)s'
-    fh = logging.FileHandler('sniper.log')
+    fh = logging.FileHandler('sniper.log', encoding='utf-8')
     sh = logging.StreamHandler(sys.stdout)
     logging.basicConfig(level=logging.INFO,
                         format=log_format, handlers=[fh, sh])
