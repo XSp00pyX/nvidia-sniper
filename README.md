@@ -62,32 +62,20 @@ pipenv install
 
 ### Windows
 1. Check if you already have a Python 3.8 installation by opening Windows PowerShell and executing `python --version`
-    - If you see `Python 3.8.0` or higher, skip to step 4
-    - If you see `Python 3.7.9` or lower, skip to step 2
-    - If you see `python : The term 'python' is not recognized`, continue to step 2
-2. Install the latest [Python 3.8](https://www.microsoft.com/en-us/p/python-38/9mssztt1n39l) for Windows
-3. Ensure you have the correct Python on your PATH
-    - Open the Start menu and enter `PATH`, then press Enter
-    - Click the `Environment Vairables...` button
-    - In the `User variables for user` section, click the variable `Path`, then click the `Edit...` button
-    - A new window called `Edit environment variable` will pop up, ensure `C:\Users\user\AppData\Local\Microsoft\WindowsApps` exists in this list, where `user` is your username in Windows
-    - If that path is not in the list, add it using the `New` button
-    - Remove all other PATHs which contain anything to do with Python, Pip, or Idle by clicking them, then clicking the `Delete` button
-    - Click `OK` to close the `Edit environment variable` window
-    - Click `OK` to close the `Environment Variables` window
-    - Click `OK` to close the `System Properties` window
-4. Install the latest version of [Firefox](https://www.firefox.com/)
-5. Exit all PowerShell windows, then open a new PowerShell and install Pipenv using
+    - If you see `Python 3.8.0` or higher, skip to step 4, otherwise continue to step 2
+2. Install the latest [Python 3.8](https://www.python.org/ftp/python/3.8.6/python-3.8.6-amd64.exe) for Windows
+    - Click `Add Path` at the bottom of the first installation page.
+3. Install the latest version of [Firefox](https://www.firefox.com/)
+4. Exit all PowerShell windows, then open a new PowerShell and install Pipenv using
     - `pip install pipenv`
-6. Navigate to project directory
+5. Navigate to project directory
     - If you downloaded (using git clone, or ZIP and extract) the project to `C:\Users\user\Documents\nvidia-sniper`, then use the following command: `cd C:\Users\user\Documents\nvidia-sniper`
-7. Install project dependencies using
+6. Install project dependencies using
     - `pipenv install`
-8. Install curses for Windows using
+7. Install curses for Windows using
     - `pipenv install windows-curses`
-
 <details>
-  <summary>If step 7 results in `pipenv : The term 'pipenv' is not recognized`</summary>
+  <summary>If step 6 results in `pipenv : The term 'pipenv' is not recognized`</summary>
 
   1. Setup a virtual environment using
       - `python -m venv .venv`
@@ -103,11 +91,27 @@ pipenv install
       - `pipenv install windows-curses`
 </details>
 
+<details>
+  <summary>If you get `python : The term 'python' is not recognized` even after installing Python 3.8 </summary>
+ 
+  1. Open the Start menu and enter `PATH`, then press Enter
+  2. Click the `Environment Vairables...` button
+  3. In the `User variables for user` section, click the variable `Path`, then click the `Edit...` button
+  4. A new window called `Edit environment variable` will pop up, ensure `C:\Users\<username>\AppData\Local\Programs\Python\Python38\Scripts` and 
+  `C:\Users\<username>\AppData\Local\Programs\Python\Python38` exists in this list, where `<username>` is your username in Windows
+  5. If these paths are not in the list, add them using the `New` button
+  6. Remove all other PATHs which contain anything to do with Python, Pip, or Idle by clicking them, then clicking the `Delete` button
+  7. Click `OK` to close the `Edit environment variable` window
+  8. Click `OK` to close the `Environment Variables` window
+  9. Click `OK` to close the `System Properties` window
+
+ </details>
+
 ### CAPTCHA
 
-To enable CAPTCHA support, follow these steps.
+This bot is equipped with the ability to resolve simple reCAPTCHA on its own without the use of a third party reCAPTCHA solver.  As long as you follow the recommendation in the usage section below, it is extremely likely that the bot will succesfully complete the full auto-checkout process.  With that said, there is a very small possibility that you will be presented with a more advanced reCAPTCHA requiring solving image tasks that the bot cannot handle natively.  If you would like to have a backup in place for that possibility, you have that option by following the steps below.   
 
-1. Download the [ReCaptcha Solver](https://addons.mozilla.org/en-US/firefox/addon/recaptcha-solver) extension using the link https://addons.mozilla.org/firefox/downloads/file/3423472/recaptcha_solver-5.7-fx.xpi. If you open this link in Firefox, it will automatically attempt to add the extension to your browser. That's not what we want. We want to download the *.xpi file. Try using the link in a browser other than Firefox.
+1. Download the [ReCaptcha Solver](https://addons.mozilla.org/en-US/firefox/addon/recaptcha-solver) extension using the link https://addons.mozilla.org/firefox/downloads/file/3423472/recaptcha_solver-5.7-fx.xpi. If you open this link in Firefox, it will automatically attempt to add the extension to your browser. That's not what we want. Right click the link and select "Save link as" to download the *.xpi file or try opening the link in a browser other than Firefox.
 2. Put the *.xpi file inside the root of the `nvidia-sniper` directory.
 
     <img src="images/folder.png" alt="folder" width=150/>
@@ -131,7 +135,7 @@ cd nvidia-sniper
 pipenv run python -m sniper
 ```
 
-It is highly recommended that after starting the bot, you open gmail(or another Google service) in a new tab of the bot's browser and login.  Afterwards, you can close that tab.  This greatly reduces the possibility of recaptcha requiring you to pass an image test, thus speeding up the checkout significantly.
+It is highly recommended that you use Firefox as your default browser and use it to log into Google services such as YouTube or Gmail. This dramatically reduces the possibility of reCAPTCHA requiring you to pass an image challenge during the bot's operation, thus enabling a fully automatic checkout without the need for manual intervention.
 ## Configuration
 In the `config` folder a `customer.json` file and `notifications.json` file are used to configure the data used to auto fill the forms and to configure the bots notifications. To get started, copy and rename the two template files and customize the fields to your liking.
 
@@ -199,7 +203,7 @@ The `country` field can have the following values:
 - `US`: United States
 
 ### `state`
-For `en-us` locale, the `state` field can have the following values:
+For `en-us` and `en-ca` locale, the `state` field can have the following values:
 - `AL`: Alabama
 - `AK`: Alaska
 - `AB`: Alberta
